@@ -31,4 +31,14 @@ def draw_texture(texture_id, x, y, w, h):
     
     glDisable(GL_TEXTURE_2D)
     
+def draw_rectangle(x, y, width, height, color=(1, 1, 1)):
+    glColor3f(*color)
+    glBegin(GL_QUADS)
+    glVertex2f(x, y)
+    glVertex2f(x + width, y)
+    glVertex2f(x + width, y + height)
+    glVertex2f(x, y + height)
+    glEnd()   
+
+    
        
