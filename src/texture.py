@@ -31,14 +31,16 @@ def draw_texture(texture_id, x, y, w, h):
     
     glDisable(GL_TEXTURE_2D)
     
-def draw_rectangle(x, y, width, height, color=(1, 1, 1)):
-    glColor3f(*color)
+def draw_rectangle(x, y, width, height, color=(1, 1, 1), alpha=1.0):
+    """Draw a rectangle with optional alpha transparency"""
+    glColor4f(color[0], color[1], color[2], alpha)
     glBegin(GL_QUADS)
     glVertex2f(x, y)
     glVertex2f(x + width, y)
     glVertex2f(x + width, y + height)
     glVertex2f(x, y + height)
-    glEnd()   
+    glEnd()
+    glColor3f(1, 1, 1)  # Reset color to white
 
     
        
