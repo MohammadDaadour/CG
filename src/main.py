@@ -5,6 +5,7 @@ from text_manager import render_text
 from health_system import HealthSystem
 from zombie import Zombie
 from score_system import ScoreSystem
+from audio_manager import AudioManager
 import random
 
 class App:
@@ -46,6 +47,7 @@ class App:
         # Game systems
         self.health_system = HealthSystem(max_health=100, damage_rate=20)
         self.score_system = ScoreSystem(target_score=10)
+        self.audio_manager = AudioManager()  # Initialize audio manager
         
         # Zombie management
         self.zombies = []
@@ -123,6 +125,8 @@ class App:
             'y': self.player_y + 50,
             'target_zombie': self.active_zombie_index
         })
+        # Play fire sound effect
+        self.audio_manager.play_sound('fire')
 
     def update(self, dt):
         """Update all game systems"""
@@ -246,6 +250,8 @@ class App:
         self.quit()
     
     def quit(self):
+        """Clean up resources before quitting"""
+        self.audio_manager.cleanup()  # Clean up audio resources
         pg.quit()
 
 if __name__ == "__main__":
