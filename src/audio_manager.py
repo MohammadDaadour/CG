@@ -1,5 +1,6 @@
 import pygame as pg
 import os
+from pathlib import Path
 
 class AudioManager:
     def __init__(self):
@@ -12,7 +13,8 @@ class AudioManager:
             print("Pygame mixer initialized successfully")
         except Exception as e:
             print(f"Error initializing pygame mixer: {e}")
-        
+            return
+            
         # Load sound effects
         self.sounds = {}
         self._load_sounds()
@@ -20,25 +22,28 @@ class AudioManager:
     def _load_sounds(self):
         """Load all game sound effects"""
         try:
-            # Use absolute path for fire sound - Fix path construction
-            fire_sound_path = "D:\\FCAI\\Computer graphic\\project\\CG\\assets\\sounds\\fire.mp3"
-            # Alternative way using os.path.normpath
-            # fire_sound_path = os.path.normpath("D:/FCAI/Computer graphic/project/CG/assets/sounds/fire.mp3")
+            # Get the project root directory (assuming src folder is one level down from project root)
+            current_file = Path(__file__)
+            project_root = current_file.parent.parent
+            sound_dir = project_root / "assets" / "sounds"
+            
+            # Construct the proper path for the fire sound
+            fire_sound_path = sound_dir / "fire.mp3"
+            
+            print(f"Looking for sound file at: {fire_sound_path}")
             
             # Check if file exists
-            if not os.path.exists(fire_sound_path):
+            if not fire_sound_path.exists():
                 print(f"Error: Sound file does not exist at path: {fire_sound_path}")
-                print("Current working directory:", os.getcwd())  # Debug: print current directory
                 self.sounds['fire'] = None
                 return
                 
             print(f"Attempting to load sound from: {fire_sound_path}")
-            self.sounds['fire'] = pg.mixer.Sound(fire_sound_path)
+            self.sounds['fire'] = pg.mixer.Sound(str(fire_sound_path))
             
-            # Verify sound was loaded
+            # Verify sound was loaded and set volume
             if self.sounds['fire']:
-                print(f"Successfully loaded fire sound. Sound object: {self.sounds['fire']}")
-                # Set volume for each sound
+                print("Successfully loaded fire sound")
                 self.sounds['fire'].set_volume(self.volume)
                 print(f"Sound volume set to: {self.volume}")
                 
@@ -54,7 +59,6 @@ class AudioManager:
         except Exception as e:
             print(f"Detailed error loading sounds: {str(e)}")
             print(f"Error type: {type(e).__name__}")
-            # Create empty sound if file not found
             self.sounds['fire'] = None
     
     def play_sound(self, sound_name):
